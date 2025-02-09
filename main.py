@@ -36,7 +36,7 @@ class WifiScanner:
             line = line.strip()
             if 'SSID' in line and 'BSSID' not in line:
                 if current_network:
-                    if len(current_network) >= 3 and current_network.get('ssid'):  # If we have all needed info and SSID is not empty
+                    if len(current_network) >= 3 and current_network.get('ssid'):  
                         current_network['timestamp'] = datetime.now()
                         networks.append(current_network.copy())
                     current_network = {}
@@ -51,13 +51,12 @@ class WifiScanner:
             elif 'Channel' in line:
                 try:
                     channel_str = line.split(':')[1].strip()
-                    # Extract just the channel number if it contains additional info
                     channel = int(re.search(r'(\d+)', channel_str).group(1))
                     current_network['channel'] = channel
                 except (ValueError, IndexError, AttributeError):
                     continue
         
-        # Don't forget to add the last network if it exists and SSID is not empty
+        # add the last network if it exists and SSID is not empty
         if current_network and len(current_network) >= 3 and current_network.get('ssid'):
             current_network['timestamp'] = datetime.now()
             networks.append(current_network)
@@ -81,7 +80,7 @@ class WifiScanner:
                     current_network['signal_strength'] = min(100, max(0, signal_strength))
             elif 'Channel' in line:
                 current_network['channel'] = int(line.split(':')[1])
-                if len(current_network) == 3 and current_network.get('ssid'):  # If we have all needed info and SSID is not empty
+                if len(current_network) == 3 and current_network.get('ssid'):
                     current_network['timestamp'] = datetime.now()
                     networks.append(current_network.copy())
                     current_network = {}
